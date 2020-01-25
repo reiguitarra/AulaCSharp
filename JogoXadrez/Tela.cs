@@ -10,6 +10,7 @@ namespace JogoXadrez
 
             for (int i = 0; i < tab.Linhas; i++)
             {
+                Console.Write(8 - i + " ");
                 for (int j = 0; j < tab.Colunas; j++)
                 {
                     if (tab.Peca(i,j) == null)
@@ -24,7 +25,7 @@ namespace JogoXadrez
 
                 Console.WriteLine();
             }
-
+            Console.WriteLine("  A B C D E F G H");
         }
     }
 }
