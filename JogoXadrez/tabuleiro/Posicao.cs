@@ -1,33 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace tabuleiro {
+    class Posicao {
 
-namespace tabuleiro
-{
-    class Posicao
-    {
-        public int Linha { get; set; }
-        public int Coluna { get; set; }
+        public int linha { get; set; }
+        public int coluna { get; set; }
 
-        public Posicao()
-        {
-
+        public Posicao(int linha, int coluna) {
+            this.linha = linha;
+            this.coluna = coluna;
         }
 
-        public Posicao(int linha, int coluna)
-        {
-            Linha = linha;
-            Coluna = coluna;
+        public void definirValores(int linha, int coluna) {
+            this.linha = linha;
+            this.coluna = coluna;
         }
 
-        public void definirValores(int linha, int coluna)
-        {
-            Linha = linha;
-            Coluna = coluna;
-        }
-        public override string ToString()
-        {
-            return "Posição  Linha : " + Linha + " Coluna : " + Coluna;
+        public override string ToString() {
+            return linha
+                + ", "
+                + coluna;
         }
     }
 }
