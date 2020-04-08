@@ -16,18 +16,21 @@ namespace tabuleiro
 
         public Posicao(int linha, int coluna)
         {
-            Linha = linha;
-            Coluna = coluna;
+            this.Linha = linha;
+            this.Coluna = coluna;
         }
 
-        public void definirValores(int linha, int coluna)
+        public void DefinirValores(int linha, int coluna)
         {
             Linha = linha;
             Coluna = coluna;
         }
         public override string ToString()
         {
-            return "Posição  Linha : " + Linha + " Coluna : " + Coluna;
+            return Linha
+
+                + " . "
+                + Coluna;
         }
     }
 }

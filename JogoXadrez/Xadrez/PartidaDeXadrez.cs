@@ -1,14 +1,16 @@
-﻿using tabuleiro;
+﻿using System;
+using tabuleiro;
 using System.Collections.Generic;
 
-namespace Xadrez
+namespace xadrez
 {
     class PartidaDeXadrez
     {
+
         public Tabuleiro Tab { get; private set; }
-        public int turno { get; private set; }
-        public Cor jogadorAtual { get; private set; }
         public bool Terminada { get; private set; }
+        public int Turno { get; private set; }
+        public Cor JogadorAtual { get; private set; }
         private HashSet<Peca> pecas;
         private HashSet<Peca> capturadas;
         public bool Xeque { get; private set; }
@@ -17,22 +19,23 @@ namespace Xadrez
         public PartidaDeXadrez()
         {
             Tab = new Tabuleiro(8, 8);
-            turno = 1;
-            jogadorAtual = Cor.Branca;
+            Turno = 1;
+            JogadorAtual = Cor.Branca;
             Terminada = false;
-            Xeque = false;
             pecas = new HashSet<Peca>();
             capturadas = new HashSet<Peca>();
-            colocarPecas();
+            Xeque = false;
+
+            ColocarPecas();
         }
 
 
-        public Peca executaMovimento(Posicao origem, Posicao destino)
+        public Peca ExecutaMovimento(Posicao origem, Posicao destino)
         {
             Peca p = Tab.RetirarPeca(origem);
-            p.incrementaQtdeMovimentos();
+            p.IncrementaQtdMovimento();
             Peca pecaCapturada = Tab.RetirarPeca(destino);
-            Tab.ColocarPeca(p, destino);
+            Tab.colocarPeca(p, destino);
 
             if (pecaCapturada != null)
             {
@@ -42,34 +45,34 @@ namespace Xadrez
             return pecaCapturada;
         }
 
-        public void desfazMovimento(Posicao origem, Posicao destino, Peca pecaCapturada)
+        public void DesfazMovimento(Posicao origem, Posicao destino, Peca pecaCapturada) 
         {
             Peca p = Tab.RetirarPeca(destino);
-            p.decrementaQteMovimentos();
+            p.DecrementaQtdMovimento();
             if (pecaCapturada != null)
             {
-                Tab.ColocarPeca(pecaCapturada, destino);
+                Tab.colocarPeca(pecaCapturada, destino);
                 capturadas.Remove(pecaCapturada);
-            }
 
-            Tab.ColocarPeca(p, origem);
+            }
+            Tab.colocarPeca(p, origem);
+
 
         }
 
 
-        public void realizaJogada(Posicao origem, Posicao destino)
+        public void RealizaJogada(Posicao origem, Posicao destino)
         {
-            
-            Peca pecaCapturada = executaMovimento(origem, destino);
+            Peca pecaCapturada =  ExecutaMovimento(origem, destino);
 
-            if (estaEmXeque(jogadorAtual))
+            if (EstaEmXeque(JogadorAtual))
             {
-                desfazMovimento(origem, destino, pecaCapturada);
-                throw new TabuleiroException("Voce não pode se colocar em Xeque!");
-
+                DesfazMovimento(origem, destino,pecaCapturada);
+                throw new TabuleiroException("Voce não pode se colocar em xeque");
             }
 
-            if (estaEmXeque(adversaria(jogadorAtual)))
+
+            if (EstaEmXeque(Adversaria(JogadorAtual)))
             {
                 Xeque = true;
             }
@@ -78,44 +81,46 @@ namespace Xadrez
                 Xeque = false;
             }
 
-            turno++;
-            mudaJogador();
+            Turno++;
+            MudaJogador();
 
         }
 
-        public void validarPosicaoDeOrigem(Posicao pos)
+        private void MudaJogador()
         {
-            if (Tab.Peca(pos) == null)
+            if (JogadorAtual == Cor.Branca)
             {
-                throw new TabuleiroException("Não Existe peça na posição de origem!");
-            }
-
-            if (jogadorAtual != Tab.Peca(pos).Cor)
-            {
-                throw new TabuleiroException("A peça na posição escolhida não é sua!");
-            }
-            if (!Tab.Peca(pos).existeMovimentosPossiveis())
-            {
-                throw new TabuleiroException("Não existe movimentos possíveis para a peça de origem escolhida! ");
-            }
-        }
-
-        public void validarPosicaoDeDestino(Posicao origem, Posicao destino)
-        {
-            if (!Tab.Peca(origem).podeMoverPara(destino))
-            {
-                throw new TabuleiroException("Posição de destino inválida! ");
-            }
-        }
-        private void mudaJogador()
-        {
-            if (jogadorAtual == Cor.Branca)
-            {
-                jogadorAtual = Cor.Preta;
+                JogadorAtual = Cor.Preta;
             }
             else
             {
-                jogadorAtual = Cor.Branca;
+                JogadorAtual = Cor.Branca;
+            }
+        }
+
+        public void ValidaPosicaoDeOrigem(Posicao pos)
+        {
+            if (Tab.Peca(pos) == null)
+            {
+                throw new TabuleiroException("Não existe peça na origem escolhida!");
+            }
+
+            if (JogadorAtual != Tab.Peca(pos).Cor)
+            {
+                throw new TabuleiroException("A peça de origem não é sua!");
+            }
+
+            if (!Tab.Peca(pos).ExisteMovimentosPossiveis())
+            {
+                throw new TabuleiroException("Não há movimentos possíveis para a peça de origem escolhida!");
+            }
+        }
+
+        public void ValidaPosicaoDeDestino(Posicao origem, Posicao destino)
+        {
+            if (!Tab.Peca(origem).PodeMoverPara(destino))
+            {
+                throw new TabuleiroException("A posição de Destino é inválida!");
             }
         }
 
@@ -129,25 +134,29 @@ namespace Xadrez
                     aux.Add(x);
                 }
             }
+
             return aux;
         }
 
-        public HashSet<Peca> pecasEmJogo(Cor cor)
+        public HashSet<Peca> PecasEmJogo(Cor cor)
         {
             HashSet<Peca> aux = new HashSet<Peca>();
-            foreach (Peca x in capturadas)
+            foreach (Peca x in pecas)
             {
                 if (x.Cor == cor)
                 {
                     aux.Add(x);
                 }
             }
+
             aux.ExceptWith(pecasCapturadas(cor));
+
             return aux;
         }
 
-        private Cor adversaria(Cor cor)
+        private Cor Adversaria(Cor cor)
         {
+
             if (cor == Cor.Branca)
             {
                 return Cor.Preta;
@@ -156,12 +165,12 @@ namespace Xadrez
             {
                 return Cor.Branca;
             }
+            
         }
 
-
-        private Peca rei(Cor cor)
+        private Peca Rei(Cor cor)
         {
-            foreach (Peca x in pecasEmJogo(cor))
+            foreach (Peca x in PecasEmJogo(cor))
             {
                 if (x is Rei)
                 {
@@ -171,56 +180,70 @@ namespace Xadrez
 
             return null;
         }
-        public bool estaEmXeque(Cor cor)
+
+        public bool EstaEmXeque(Cor cor)
         {
-            Peca R = rei(cor);
+            Peca R = Rei(cor);
+
             if (R == null)
             {
-                throw new TabuleiroException("Não tem rei da cor " + cor + " no tabuleiro!");
+                throw new TabuleiroException("Não existe a peça Rei da cor "+ cor +" No Tabuleiro");
             }
-            foreach (Peca x in pecasEmJogo(adversaria(cor)))
+
+            foreach (Peca x in PecasEmJogo(Adversaria(cor)))
             {
-                bool[,] mat = x.movimentosPossiveis();
+                bool[,] mat = x.MovimentosPossiveis();
                 if (mat[R.Posicao.Linha, R.Posicao.Coluna])
                 {
                     return true;
+
                 }
+               
             }
             return false;
         }
 
-
-
-        public void colocarNovaPeca(char coluna, int linha, Peca peca)
+        public void ColocarNovaPeca(char coluna, int linha, Peca peca)
         {
-            Tab.ColocarPeca(peca, new PosicaoXadrez(coluna, linha).ToPosicao());
+            Tab.colocarPeca(peca, new PosicaoXadrez(coluna, linha).ToPosicao());
             pecas.Add(peca);
         }
 
 
 
-        private void colocarPecas()
+        private void ColocarPecas()
         {
-            //Brancas
 
-            colocarNovaPeca('c', 1, new Torre(Tab, Cor.Branca));
-            colocarNovaPeca('c', 2, new Torre(Tab, Cor.Branca));
-            colocarNovaPeca('d', 2, new Torre(Tab, Cor.Branca));
-            colocarNovaPeca('e', 2, new Torre(Tab, Cor.Branca));
-            colocarNovaPeca('e', 1, new Torre(Tab, Cor.Branca));
-            colocarNovaPeca('d', 1, new Rei(Tab, Cor.Branca));
+            ColocarNovaPeca('c', 1, new Torre(Tab, Cor.Branca));
+            ColocarNovaPeca('c', 2, new Torre(Tab, Cor.Branca));
+            ColocarNovaPeca('d', 2, new Torre(Tab, Cor.Branca));
+            ColocarNovaPeca('e', 2, new Torre(Tab, Cor.Branca));
+            ColocarNovaPeca('e', 1, new Torre(Tab, Cor.Branca));
+            ColocarNovaPeca('d', 1, new Rei(Tab, Cor.Branca));
 
-            //Pretas
+            ColocarNovaPeca('c', 7, new Torre(Tab, Cor.Preta));
+            ColocarNovaPeca('c', 8, new Torre(Tab, Cor.Preta));
+            ColocarNovaPeca('d', 7, new Torre(Tab, Cor.Preta));
+            ColocarNovaPeca('e', 7, new Torre(Tab, Cor.Preta));
+            ColocarNovaPeca('e', 8, new Torre(Tab, Cor.Preta));
+            ColocarNovaPeca('d', 8, new Rei(Tab, Cor.Preta));
 
-            colocarNovaPeca('c', 7, new Torre(Tab, Cor.Preta));
-            colocarNovaPeca('c', 8, new Torre(Tab, Cor.Preta));
-            colocarNovaPeca('d', 7, new Torre(Tab, Cor.Preta));
-            colocarNovaPeca('e', 7, new Torre(Tab, Cor.Preta));
-            colocarNovaPeca('e', 8, new Torre(Tab, Cor.Preta));
-            colocarNovaPeca('d', 8, new Rei(Tab, Cor.Preta));
+            //Tab.colocarPeca(new Torre(Tab, Cor.Branca), new PosicaoXadrez('c', 1).ToPosicao());
+            //Tab.colocarPeca(new Torre(Tab, Cor.Branca), new PosicaoXadrez('c', 2).ToPosicao());
+            //Tab.colocarPeca(new Torre(Tab, Cor.Branca), new PosicaoXadrez('d', 2).ToPosicao());
+            //Tab.colocarPeca(new Torre(Tab, Cor.Branca), new PosicaoXadrez('e', 2).ToPosicao());
+            //Tab.colocarPeca(new Torre(Tab, Cor.Branca), new PosicaoXadrez('e', 1).ToPosicao());
+            //Tab.colocarPeca(new Rei(Tab, Cor.Branca), new PosicaoXadrez('d', 1).ToPosicao());
 
-            
+            //Tab.colocarPeca(new Torre(Tab, Cor.Preta), new PosicaoXadrez('c', 7).ToPosicao());
+            //Tab.colocarPeca(new Torre(Tab, Cor.Preta), new PosicaoXadrez('c', 8).ToPosicao());
+            //Tab.colocarPeca(new Torre(Tab, Cor.Preta), new PosicaoXadrez('d', 7).ToPosicao());
+            //Tab.colocarPeca(new Torre(Tab, Cor.Preta), new PosicaoXadrez('e', 7).ToPosicao());
+            //Tab.colocarPeca(new Torre(Tab, Cor.Preta), new PosicaoXadrez('e', 8).ToPosicao());
+            //Tab.colocarPeca(new Rei(Tab, Cor.Preta), new PosicaoXadrez('d', 8).ToPosicao());
+
 
         }
+
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace tabuleiro
 {
     class Tabuleiro
@@ -10,37 +7,34 @@ namespace tabuleiro
         public int Colunas { get; set; }
         private Peca[,] pecas;
 
-        public Tabuleiro(int linhas, int colunas)
+        public Tabuleiro(int linha, int coluna)
         {
-            Linhas = linhas;
-            Colunas = colunas;
-            pecas = new Peca[linhas, colunas];
-
-
+            Linhas = linha;
+            Colunas = coluna;
+            pecas = new Peca[Linhas, Colunas];
         }
 
-        public Peca Peca (int linha, int coluna)
+        public Peca Peca(int linha, int coluna)
         {
             return pecas[linha, coluna];
         }
 
         public Peca Peca(Posicao pos)
         {
-            return pecas[pos.Linha,pos.Coluna];
+            return pecas[pos.Linha, pos.Coluna];
         }
 
         public bool ExistePeca(Posicao pos)
         {
             ValidarPosicao(pos);
             return Peca(pos) != null;
+
         }
-
-
-        public void ColocarPeca(Peca p, Posicao pos)
+        public void colocarPeca(Peca p, Posicao pos)
         {
             if (ExistePeca(pos))
             {
-                throw new TabuleiroException("Já existe uma peça nesta posição! ");
+                throw new TabuleiroException("Já existe uma peça nessa posição! ");
             }
             pecas[pos.Linha, pos.Coluna] = p;
             p.Posicao = pos;
@@ -48,17 +42,16 @@ namespace tabuleiro
 
         public Peca RetirarPeca(Posicao pos)
         {
-
             if (Peca(pos) == null)
             {
                 return null;
             }
-
             Peca aux = Peca(pos);
             aux.Posicao = null;
             pecas[pos.Linha, pos.Coluna] = null;
             return aux;
         }
+
 
         public bool PosicaoValida(Posicao pos)
         {
@@ -75,7 +68,7 @@ namespace tabuleiro
             {
                 throw new TabuleiroException("Posição inválida! ");
             }
-
         }
+
     }
 }

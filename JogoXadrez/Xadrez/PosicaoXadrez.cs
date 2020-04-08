@@ -1,7 +1,6 @@
-﻿
-using tabuleiro;
+﻿using tabuleiro;
 
-namespace Xadrez
+namespace xadrez
 {
     class PosicaoXadrez
     {
@@ -14,7 +13,6 @@ namespace Xadrez
             Linha = linha;
         }
 
-
         public Posicao ToPosicao()
         {
             return new Posicao(8 - Linha, Coluna - 'a');
@@ -24,8 +22,5 @@ namespace Xadrez
         {
             return "" + Coluna + Linha;
         }
-
-       
-
     }
 }
