@@ -20,15 +20,14 @@ namespace JogoXadrez
                     {
                         Console.Clear();
                         Tela.imprimirPartida(partida);
-
-                       
-
+                        
                         Console.WriteLine();
                         Console.Write("Origem : ");
                         Posicao origem = Tela.LerPosicaoXadrez().ToPosicao();
                         partida.validarPosicaoDeOrigem(origem);
 
                         bool[,] posicoesPossiveis = partida.Tab.Peca(origem).movimentosPossiveis();
+
                         Console.Clear();
                         Tela.ImprimirTabuleiro(partida.Tab, posicoesPossiveis);
 
