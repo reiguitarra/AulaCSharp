@@ -50,9 +50,10 @@ namespace JogoXadrez
                     }
 
                 }
-                
 
-                
+                Console.Clear();
+                Tela.ImprimirPartida(partida);
+
 
                 Console.ReadKey();
             }
