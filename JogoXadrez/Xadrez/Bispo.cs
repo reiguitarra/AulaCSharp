@@ -1,11 +1,13 @@
-﻿using tabuleiro;
-
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using tabuleiro;
 
 namespace Xadrez
 {
-    class Torre : Peca
+    class Bispo : Peca
     {
-        public Torre(Tabuleiro tab, Cor cor) : base(tab,cor)
+        public Bispo(Tabuleiro tab, Cor cor) : base(tab, cor)
         {
 
         }
@@ -23,9 +25,9 @@ namespace Xadrez
             bool[,] mat = new bool[Tab.Linhas, Tab.Colunas];
             Posicao pos = new Posicao(0, 0);
 
-            //Acima
-            pos.DefinirValores(Posicao.Linha -1, Posicao.Coluna);
+            //NO
 
+            pos.DefinirValores(Posicao.Linha - 1, Posicao.Coluna - 1);
             while (Tab.PosicaoValida(pos) && PodeMover(pos))
             {
                 mat[pos.Linha, pos.Coluna] = true;
@@ -34,12 +36,14 @@ namespace Xadrez
                     break;
                 }
 
-                pos.Linha = pos.Linha - 1;
+                pos.DefinirValores(pos.Linha - 1, pos.Coluna - 1);
+
+
             }
 
-            //Abaixo
-            pos.DefinirValores(Posicao.Linha + 1, Posicao.Coluna);
+            //Ne
 
+            pos.DefinirValores(Posicao.Linha - 1, Posicao.Coluna + 1);
             while (Tab.PosicaoValida(pos) && PodeMover(pos))
             {
                 mat[pos.Linha, pos.Coluna] = true;
@@ -48,13 +52,14 @@ namespace Xadrez
                     break;
                 }
 
-                pos.Linha = pos.Linha + 1;
+                pos.DefinirValores(pos.Linha - 1, pos.Coluna + 1);
+
+
             }
 
-            //Direita
+            //SE
 
-            pos.DefinirValores(Posicao.Linha, Posicao.Coluna + 1);
-
+            pos.DefinirValores(Posicao.Linha + 1, Posicao.Coluna + 1);
             while (Tab.PosicaoValida(pos) && PodeMover(pos))
             {
                 mat[pos.Linha, pos.Coluna] = true;
@@ -63,13 +68,14 @@ namespace Xadrez
                     break;
                 }
 
-                pos.Coluna = pos.Coluna + 1;
+                pos.DefinirValores(pos.Linha + 1, pos.Coluna + 1);
+
+
             }
 
-            //Esquerda
+            //SO
 
-            pos.DefinirValores(Posicao.Linha, Posicao.Coluna - 1);
-
+            pos.DefinirValores(Posicao.Linha + 1, Posicao.Coluna - 1);
             while (Tab.PosicaoValida(pos) && PodeMover(pos))
             {
                 mat[pos.Linha, pos.Coluna] = true;
@@ -78,7 +84,9 @@ namespace Xadrez
                     break;
                 }
 
-                pos.Coluna = pos.Coluna - 1;
+                pos.DefinirValores(pos.Linha + 1, pos.Coluna - 1);
+
+
             }
 
             return mat;
@@ -86,7 +94,7 @@ namespace Xadrez
 
         public override string ToString()
         {
-            return "T";
+            return "B";
         }
     }
 }

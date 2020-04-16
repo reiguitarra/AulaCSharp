@@ -1,6 +1,6 @@
 ﻿using System;
 using tabuleiro;
-using xadrez;
+using Xadrez;
 
 namespace JogoXadrez
 {
