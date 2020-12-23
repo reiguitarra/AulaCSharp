@@ -1,6 +1,0 @@
-C:\Users\reinaldo.almeida\source\repos\TesteSite\XGamer.Domain\bin\Debug\XGamer.Domain.dll
-C:\Users\reinaldo.almeida\source\repos\TesteSite\XGamer.Domain\bin\Debug\XGamer.Domain.pdb
-C:\Users\reinaldo.almeida\source\repos\TesteSite\XGamer.Domain\obj\Debug\XGamer.Domain.csprojAssemblyReference.cache
-C:\Users\reinaldo.almeida\source\repos\TesteSite\XGamer.Domain\obj\Debug\XGamer.Domain.csproj.CoreCompileInputs.cache
-C:\Users\reinaldo.almeida\source\repos\TesteSite\XGamer.Domain\obj\Debug\XGamer.Domain.dll
-C:\Users\reinaldo.almeida\source\repos\TesteSite\XGamer.Domain\obj\Debug\XGamer.Domain.pdb
